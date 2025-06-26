@@ -2,78 +2,79 @@ using UnityEngine;
 
 public class CollectorController : MonoBehaviour
 {
-    public float maxDistanceFromPlayer = 5f; // ÇÃ·¹ÀÌ¾î·ÎºÎÅÍ ÃÖ´ë °Å¸®
-    private GameObject player; // ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®
-    private LineRenderer lineRenderer; // ¸¶¿ì½º±îÁö ¼±À» ±×¸± LineRenderer
+    public float maxDistanceFromPlayer = 5f; // í”Œë ˆì´ì–´ë¡œë¶€í„° ìµœëŒ€ ê±°ë¦¬
+    private GameObject player; // í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸
+    private LineRenderer lineRenderer; // ë§ˆìš°ìŠ¤ ë°©í–¥ ì„ ì„ ê·¸ë¦´ LineRenderer
 
     void Start()
     {
-        // ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®¸¦ ÅÂ±×·Î Ã£°Å³ª, ¹Ì¸® ÇÒ´ç
+        // í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ë¥¼ íƒœê·¸ë¡œ ì°¾ì•„ì„œ, ì´ë¦„ í• ë‹¹
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
-            Debug.LogError("Player ¿ÀºêÁ§Æ®¿¡ 'Player' ÅÂ±×¸¦ ¼³Á¤ÇØÁÖ¼¼¿ä!");
-            enabled = false; // ÇÃ·¹ÀÌ¾î¸¦ Ã£Áö ¸øÇÏ¸é ½ºÅ©¸³Æ® ºñÈ°¼ºÈ­
+            Debug.LogError("Player ì˜¤ë¸Œì íŠ¸ê°€ 'Player' íƒœê·¸ë¡œ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
+            enabled = false; // í”Œë ˆì´ì–´ë¥¼ ì°¾ì§€ ëª»í•˜ë©´ ìŠ¤í¬ë¦½íŠ¸ ë¹„í™œì„±í™”
             return;
         }
 
-        // LineRenderer ÄÄÆ÷³ÍÆ® °¡Á®¿À±â (¼öÁı±â ¿ÀºêÁ§Æ®¿¡ Ãß°¡ ÇÊ¿ä)
+        // LineRenderer ì»´í¬ë„ŒíŠ¸ í™•ì¸(ì—†ìœ¼ë©´ ì˜¤ë¸Œì íŠ¸ì— ì¶”ê°€ í•„ìš”)
         lineRenderer = GetComponent<LineRenderer>();
         if (lineRenderer == null)
         {
-            Debug.LogError("¼öÁı±â ¿ÀºêÁ§Æ®¿¡ LineRenderer ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇØÁÖ¼¼¿ä!");
+            Debug.LogError("ì´ ì˜¤ë¸Œì íŠ¸ì— LineRenderer ì»´í¬ë„ŒíŠ¸ë¥¼ ì¶”ê°€í•´ì£¼ì„¸ìš”!");
             enabled = false;
         }
 
-        // LineRenderer ¼³Á¤ (¿øÇÏ´Â »ö»ó, µÎ²² µîÀ¸·Î ÀÎ½ºÆåÅÍ¿¡¼­ Á¶Á¤ °¡´É)
-        lineRenderer.positionCount = 2; // ½ÃÀÛÁ¡°ú ³¡Á¡ 2°³
+        // LineRenderer ì„¤ì • (ì‹œì‘ì , ëì  ì •ë³´ë¥¼ ì¸ë±ìŠ¤ì— ë§ê²Œ ì„¤ì •)
+        lineRenderer.positionCount = 2; // ì„ ë¶„ì˜ ì ì€ 2ê°œ
     }
 
     void Update()
     {
         if (player == null || lineRenderer == null) return;
 
-        // 1. ¸¶¿ì½º ¿ùµå ÁÂÇ¥ °¡Á®¿À±â
+        // 1. ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ì›”ë“œ ì¢Œí‘œë¡œ ë³€í™˜
         Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        // 2. ÇÃ·¹ÀÌ¾î À§Ä¡
+        // 2. í”Œë ˆì´ì–´ ìœ„ì¹˜
         Vector2 playerPos = player.transform.position;
 
-        // 3. ÇÃ·¹ÀÌ¾î¿¡¼­ ¸¶¿ì½º±îÁöÀÇ ¹æÇâ º¤ÅÍ
+        // 3. í”Œë ˆì´ì–´ì—ì„œ ë§ˆìš°ìŠ¤ ë°©í–¥ ë²¡í„° ê³„ì‚°
         Vector2 direction = (mouseWorldPos - playerPos).normalized;
 
-        // 4. ¼öÁı±â À§Ä¡ ¾÷µ¥ÀÌÆ®
-        // ÇÃ·¹ÀÌ¾î·ÎºÎÅÍ ¸¶¿ì½º ¹æÇâÀ¸·Î ÃÖ´ë °Å¸®±îÁö¸¸ ÀÌµ¿
-        // ÀÌ ºÎºĞÀ» Á¶ÀıÇÏ¿© ¸¶¿ì½º°¡ ¸Ö¾îÁö¸é ¼öÁı±â°¡ µû¶ó°¡´Â ¼Óµµ µîÀ» Á¶ÀıÇÒ ¼ö ÀÖ½À´Ï´Ù.
-        // ¿©±â¼­´Â ¸¶¿ì½º À§Ä¡°¡ ÇÃ·¹ÀÌ¾î·ÎºÎÅÍ ÀÏÁ¤ °Å¸®¸¦ ³Ñ¾î°¡¸é ±× °Å¸®±îÁö¸¸ ÄÃ·ºÅÍ¸¦ ¹èÄ¡ÇÕ´Ï´Ù.
+        // 4. ìˆ˜ì§‘ê¸° ìœ„ì¹˜ ê°±ì‹ 
+        // í”Œë ˆì´ì–´ë¡œë¶€í„° ë§ˆìš°ìŠ¤ ë°©í–¥ìœ¼ë¡œ ìµœëŒ€ ê±°ë¦¬ê¹Œì§€ë§Œ ì´ë™
+        // ì´ êµ¬ê°„ì„ ì¡°ì ˆí•´ì„œ ë§ˆìš°ìŠ¤ê°€ ë„ˆë¬´ ë©€ë¦¬ ìˆì–´ë„ ì¼ì • ì†ë„ë¡œë§Œ ì´ë™í•˜ê²Œ í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+        // ì—¬ê¸°ì„œëŠ” ë§ˆìš°ìŠ¤ ìœ„ì¹˜ê°€ í”Œë ˆì´ì–´ë¡œë¶€í„° ìµœëŒ€ ê±°ë¦¬ë¥¼ ë„˜ìœ¼ë©´ ê·¸ ê±°ë¦¬ê¹Œì§€ë§Œ ì´ë™í•©ë‹ˆë‹¤.
+        // Mathf.Min ì€ ë‘ ê°’ ì¤‘ ì‘ì€ ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
         float distance = Vector2.Distance(playerPos, mouseWorldPos);
         Vector2 targetCollectorPos = playerPos + direction * Mathf.Min(distance, maxDistanceFromPlayer);
         transform.position = targetCollectorPos;
 
-        // 5. LineRenderer ¾÷µ¥ÀÌÆ® (ÇÃ·¹ÀÌ¾î¿¡¼­ ¼öÁı±â±îÁö ¼± ±×¸®±â)
-        // ¶Ç´Â ÇÃ·¹ÀÌ¾î¿¡¼­ ¸¶¿ì½º±îÁö ¼±À» ±×¸± ¼öµµ ÀÖ½À´Ï´Ù. (±âÈ¹¿¡ µû¶ó ¼±ÅÃ)
+        // 5. LineRenderer ê°±ì‹  (í”Œë ˆì´ì–´ì—ì„œ ìˆ˜ì§‘ê¸°ê¹Œì§€ ì„ ì„ ê·¸ë¦¼)
+        // ë˜ëŠ” í”Œë ˆì´ì–´ì—ì„œ ë§ˆìš°ìŠ¤ê¹Œì§€ ì„ ì„ ê·¸ë¦¬ê³  ì‹¶ìœ¼ë©´ ì•„ë˜ ì£¼ì„ì„ í•´ì œí•˜ì„¸ìš”. (ê¸°íšì— ë”°ë¼ ì„ íƒ)
         lineRenderer.SetPosition(0, playerPos);
-        lineRenderer.SetPosition(1, transform.position); // ¼öÁı±â À§Ä¡
-        // lineRenderer.SetPosition(1, mouseWorldPos); // ¸¶¿ì½º À§Ä¡±îÁö ±×¸± °æ¿ì
+        lineRenderer.SetPosition(1, transform.position); // ìˆ˜ì§‘ê¸° ìœ„ì¹˜
+        // lineRenderer.SetPosition(1, mouseWorldPos); // ë§ˆìš°ìŠ¤ ìœ„ì¹˜ê¹Œì§€ ì„ ì„ ê·¸ë¦¼
     }
 
-    // Ãæµ¹ Ã³¸® (Collider2D¿Í Rigidbody2D ÇÊ¿ä)
+    // ì¶©ëŒ ì²˜ë¦¬ (Collider2Dì™€ Rigidbody2D í•„ìš”)
     void OnTriggerEnter2D(Collider2D other)
     {
-        // ¼öÁı ¿ÀºêÁ§Æ®¿Í Ãæµ¹
+        // ìˆ˜ì§‘ ê°€ëŠ¥í•œ ì˜¤ë¸Œì íŠ¸ì™€ ì¶©ëŒ
         if (other.CompareTag("Collectible"))
         {
-            // Á¡¼ö È¹µæ, ¿ÀºêÁ§Æ® ÆÄ±« µî Ã³¸®
-            Debug.Log("¿ÀºêÁ§Æ® È¹µæ!");
-            GameManager.Instance?.AddScore(1); // GameManager¸¦ ¸¸µé¾ú´Ù¸é
+            // ì ìˆ˜ íšë“, ì˜¤ë¸Œì íŠ¸ íŒŒê´´ ë“± ì²˜ë¦¬
+            Debug.Log("ì•„ì´í…œ íšë“!");
+            GameManager.Instance?.AddScore(1); // GameManagerê°€ ìˆë‹¤ë©´ ì ìˆ˜ ì¶”ê°€
             Destroy(other.gameObject);
         }
-        // Àå¾Ö¹°°ú Ãæµ¹
+        // ì¥ì• ë¬¼ê³¼ ì¶©ëŒ
         else if (other.CompareTag("Obstacle"))
         {
-            // °ÔÀÓ ¿À¹ö Ã³¸®
-            Debug.Log("Àå¾Ö¹° Ãæµ¹! °ÔÀÓ ¿À¹ö!");
-            GameManager.Instance?.GameOver(); // GameManager¸¦ ¸¸µé¾ú´Ù¸é
+            // ê²Œì„ ì˜¤ë²„ ì²˜ë¦¬
+            Debug.Log("ì¥ì• ë¬¼ ì¶©ëŒ! ê²Œì„ ì˜¤ë²„!");
+            GameManager.Instance?.GameOver(); // GameManagerê°€ ìˆë‹¤ë©´ ê²Œì„ ì˜¤ë²„
         }
     }
 }
