@@ -58,23 +58,22 @@ public class CollectorController : MonoBehaviour
         // lineRenderer.SetPosition(1, mouseWorldPos); // 마우스 위치까지 선을 그림
     }
 
-    // 충돌 처리 (Collider2D와 Rigidbody2D 필요)
-    void OnTriggerEnter2D(Collider2D other)
+  void OnTriggerEnter2D(Collider2D other)
+{
+    // 수집 오브젝트와 충돌
+    if (other.CompareTag("Collectible"))
     {
-        // 수집 가능한 오브젝트와 충돌
-        if (other.CompareTag("Collectible"))
-        {
-            // 점수 획득, 오브젝트 파괴 등 처리
-            Debug.Log("아이템 획득!");
-            GameManager.Instance?.AddScore(1); // GameManager가 있다면 점수 추가
-            Destroy(other.gameObject);
-        }
-        // 장애물과 충돌
-        else if (other.CompareTag("Obstacle"))
-        {
-            // 게임 오버 처리
-            Debug.Log("장애물 충돌! 게임 오버!");
-            GameManager.Instance?.GameOver(); // GameManager가 있다면 게임 오버
-        }
+        Debug.Log("오브젝트 획득!");
+        // GameManager가 없을 때 발생하는 오류이므로, 일단 이 코드를 주석 처리합니다.
+        // GameManager.Instance?.AddScore(1);
+        Destroy(other.gameObject);
     }
+    // 장애물과 충돌
+    else if (other.CompareTag("Obstacle"))
+    {
+        Debug.Log("장애물 충돌! 게임 오버!");
+        // GameManager가 없을 때 발생하는 오류이므로, 일단 이 코드를 주석 처리합니다.
+        // GameManager.Instance?.GameOver();
+    }
+}
 }
